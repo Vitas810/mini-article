@@ -1,5 +1,5 @@
 <template>
-    <button :style="`background-color: ${color};`">
+    <button>
         {{ text }}
         <plus />
      </button>
@@ -32,6 +32,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        font-family: 'Montserrat';
         padding: 10px 16px 12px;
         border-radius: 3px;
         font-size: 16px;
@@ -41,6 +42,12 @@
         border: none;
         font-weight: 500;
         cursor: pointer;
-        font-family: 'Montserrat';
+        background-color: #ED5252;
+        &:hover {
+            background-color: #F06C6C;
+        }
+        &:active {
+            background-color: #D54A4A;
+        }
     }
 </style>

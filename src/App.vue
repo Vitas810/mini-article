@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <art-header></art-header>
+    <art-header /> 
+    <art-main />
   </div>
 </template>
 
 <script>
-import ArtHeader from './views/Art-header.vue'
+import ArtHeader from '@/views/ArtHeader.vue'
+import ArtMain from '@/views/ArtMain.vue';
 
 export default {
   name: 'App',
   components: {
-    ArtHeader
+    ArtHeader,
+    ArtMain
   }
 }
 </script>
