@@ -32,7 +32,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 9px 16px 11px;
+        padding: 10px 16px 12px;
         border-radius: 3px;
         font-size: 16px;
         line-height: 24px;
@@ -40,5 +40,7 @@
         color: #FFFFFF;
         border: none;
         font-weight: 500;
+        cursor: pointer;
+        font-family: 'Montserrat';
     }
 </style>
