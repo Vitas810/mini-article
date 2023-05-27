@@ -5,15 +5,18 @@
             <span class="main-default__description">Создайте свою первую  категорию и добавьте в неё статьи.</span>
             <btn text="Создать категорию" />
         </div>
+        <card />
     </div>
 </template>
 
 <script>
     import btn from '@/components/btn.vue';
+    import card from '@/components/card.vue'
     export default {
         name: 'ArtMain',
         components: {
-            btn
+            btn,
+            card
         }
     }
 </script>
