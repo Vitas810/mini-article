@@ -1,24 +1,44 @@
 <template>
-    <div class="header">
-        <btn text="Создать категорию" /> 
+    <header class="header">
+        <btn text="Создать категорию" @click="showCreateCategory"/> 
         <div class="header-search">
             <input type="text" placeholder="Найти статью">
             <search />
         </div>
-    </div>
+
+        <art-create-category :show-popup-category="showPopupCategory"
+                            @close_popup="closePopup"
+        />
+    </header>
 </template>
 
 <script>
     document.title = 'article-page';
     import btn from '@/components/btn.vue';
-    import search from '@/assets/svg/search.svg'
+    import search from '@/assets/svg/search.svg';
+    import ArtCreateCategory from '@/views/CreateCategory.vue';
+
     export default {
         name: 'ArtHeader',
         components: {
             btn,
-            search
+            search,
+            ArtCreateCategory
+        },
+        data() {
+            return {
+                showPopupCategory: false
+            }
+        },
+        methods: {
+            showCreateCategory() {
+                this.showPopupCategory = true;
+            },
+            closePopup(value) {
+                this.showPopupCategory = value;
+            }
         }
-        }
+    }
 </script>
 <style lang="scss">
     .header {
@@ -50,12 +70,12 @@
                     display: flex;
                     align-items: center;
                     color: #A0A6BF;
-                    &::focus {
+                    &:focus {
                         color: #303446;
                     }
                 }
                 &:focus {
-                    outline:   #BFC3D5;
+                    outline:1px solid #BFC3D5;
                     color: #303446;
                 }
             }

@@ -1,7 +1,7 @@
 <template>
-    <button>
+    <button @click="clickBtn">
         {{ text }}
-        <plus />
+        <plus v-if="showIcon" />
      </button>
 </template>
 
@@ -18,16 +18,24 @@
                 type: String,
                 require: true
             },
-            color: {
-                type: String,
+            showIcon: {
+                type: Boolean,
                 require: false,
-                default: '#ED5252'
-            },
+                default: true
+            }
+        },
+        data() {
+            return {}
+        },
+        methods: {
+            clickBtn() {
+                this.$emit('click');
+            }
         }
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     button {
         display: flex;
         align-items: center;

@@ -1,22 +1,30 @@
 <template>
-    <div class="main">
-        <div class="main-default">
+    <main class="main">
+        <section class="main-default" v-if="posts.length !== 0">
             <h3>Пока нет статей</h3>
             <span class="main-default__description">Создайте свою первую  категорию и добавьте в неё статьи.</span>
             <btn text="Создать категорию" />
-        </div>
-        <card />
-    </div>
+        </section>
+        <template v-else>
+            <art-category />
+        </template>
+    </main>
 </template>
 
 <script>
     import btn from '@/components/btn.vue';
-    import card from '@/components/card.vue'
+    import ArtCategory from '@/views/ArtCategory.vue';
+
     export default {
         name: 'ArtMain',
         components: {
             btn,
-            card
+            ArtCategory,
+        },
+        data() {
+            return {
+                posts: [],
+            }
         }
     }
 </script>
