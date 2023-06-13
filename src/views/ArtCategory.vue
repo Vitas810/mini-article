@@ -15,15 +15,22 @@
 
         <div class="art-category-popup"
              v-cloak
-             v-show="showModalEditeCat"
+             v-show="showModalMenuEdite"
         >
             <ul class="art-category-popup__list">
-                <li>Редактировать</li>
                 <li>
-                    Удалить
+                    <button type="button" @click="editeCategory">Редактировать</button>
                 </li>
+                <li><button type="button">Удалить</button></li>
             </ul>
         </div>
+
+        <art-create-category :show-popup-category="showPopupEditeCategory"
+                            title-popup="Редактирование категории"
+                            name-category-popup="Название категории"
+                            parent-category-popup="Родительская категория 1"
+                            @close_popup="closePopup"
+        />
     </section>
 </template>
 
@@ -31,13 +38,15 @@
     import card from '@/components/card.vue';
     import chevronUp from '@/assets/svg/chevron-up.svg';
     import menuCat from '@/assets/svg/menu.svg';
+    import ArtCreateCategory from '@/views/CreateCategory.vue'; 
 
     export default {
         name: 'ArtCategory',
         components: {
             card,
             chevronUp,
-            menuCat
+            menuCat,
+            ArtCreateCategory
         },
         created() {
             document.addEventListener('click', e => {
@@ -46,16 +55,25 @@
                 let isMenu = target === menu || menu?.contains(target);
 
                 if (menu?.contains(target)) {
-                    this.showModalEditeCat = true;
+                    this.showModalMenuEdite = true;
                 }
-                if (!isMenu && this.showModalEditeCat) {
-                    this.showModalEditeCat = false;
+                if (!isMenu && this.showModalMenuEdite) {
+                    this.showModalMenuEdite = false;
                 }
             });
         },
         data() {
             return {
-                showModalEditeCat: false 
+                showModalMenuEdite: false,
+                showPopupEditeCategory: false
+            }
+        },
+        methods: {
+            editeCategory() {
+                this.showPopupEditeCategory = true;
+            },
+            closePopup(val) {
+                this.showPopupEditeCategory = val;
             }
         }
     }
@@ -117,6 +135,12 @@
                         &:hover {
                             background: rgba(48, 52, 70, 0.03);
                             border-radius: 5px;
+                        }
+
+                        & button {
+                            border: none;
+                            background: transparent;
+                            cursor: pointer;
                         }
                     }
                 }

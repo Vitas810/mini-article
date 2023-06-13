@@ -1,15 +1,23 @@
 <template>
     <section ref="modalCategory" class="category js-popup" v-if="showModal">
         <div class="category-modal">
-            <h2 class="category__title">Новая категория</h2>
+            <h2 class="category__title">{{ title }}</h2>
 
             <form class="category-form">
                 <label>
-                    <input name="nameCreateCategory" class="category__name" type="text" placeholder="Название" />
+                    <input name="nameCreateCategory"
+                            v-model="nameCategory"
+                            class="category__name"
+                            type="text"
+                            placeholder="Название" />
                 </label>
 
-                <art-select title="Родительская карточка (необязательно)" />
-                <art-select title="Вложенные статьи" />
+                <art-select title="Родительская карточка (необязательно)"
+                    :options="parentCategories"
+                    v-model="parentCategory" />
+                <art-select title="Вложенные статьи"
+                    :options="parentCategories"
+                    v-model="nestedCategory" />
 
                 <div class="category-footer">
                     <btn text="Сохранить" :showIcon="false" />
@@ -30,7 +38,24 @@
         props: {
             showPopupCategory: {
                 type: Boolean,
-            }
+            },
+            titlePopup: {
+                type: String,
+                require: false,
+                default: 'Новая категория'
+            },
+            nameCategoryPopup: {
+                type: String,
+                require: false
+            },
+            parentCategoryPopup: {
+                type: String,
+                require: false
+            },
+            nestedCategoryPopup: {
+                type: String,
+                require: false
+            },
         },
         components: {
             btn,
@@ -51,6 +76,17 @@
         data() {
             return {
                 showModal: this.showPopupCategory || false,
+                title: this.titlePopup || '',
+                nameCategory: this.nameCategoryPopup || '',
+                parentCategory: this.parentCategoryPopup || '',
+                nestedCategory: this.nestedCategoryPopup || '',
+                parentCategories: [
+                    { id: 1, name: 'Родительская категория 1'},
+                    { id: 2, name: 'Родительская категория 2'},
+                    { id: 3, name: 'Родительская категория 3'},
+                    { id: 4, name: 'Родительская категория 4'},
+                    { id: 5, name: 'Родительская категория 5'},
+                ]
             }
         },
         watch: {

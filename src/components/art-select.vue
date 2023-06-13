@@ -1,17 +1,15 @@
 <template>
     <div ref="select" class="__select" data-state="">
         <div class="__select__title" data-default="Option 0">{{ title }}</div>
-        <div class="__select__content">
-            <input id="singleSelect0" class="__select__input" type="radio" name="singleSelect" checked />
-            <label for="singleSelect0" class="__select__label">Option 0</label>
-            <input id="singleSelect1" class="__select__input" type="radio" name="singleSelect" />
-            <label for="singleSelect1" class="__select__label">Option 1</label>
-            <input id="singleSelect2" class="__select__input" type="radio" name="singleSelect" disabled />
-            <label for="singleSelect2" class="__select__label">Option 2 (disabled)</label>
-            <input id="singleSelect3" class="__select__input" type="radio" name="singleSelect" />
-            <label for="singleSelect3" class="__select__label">Option 3</label>
-            <input id="singleSelect4" class="__select__input" type="radio" name="singleSelect" />
-            <label for="singleSelect4" class="__select__label">Option 4</label>
+        <div class="__select__content"  >
+            <template v-for="(option, idx) in options">
+                <input :id="`singleSelect_${idx}`"
+                    class="__select__input"
+                    type="radio"
+                    
+                    name="singleSelect" />
+                <label :for="`singleSelect_${idx}`" class="__select__label">{{ option.name }}</label>
+            </template>
         </div>
     </div>
 </template>
@@ -24,6 +22,9 @@
                 type: String,
                 require: true,
                 default: 'Название'
+            },
+            options: {
+                type: Array, Object
             }
         },
         data() {
