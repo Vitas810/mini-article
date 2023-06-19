@@ -18,10 +18,12 @@
              v-show="showModalMenuEdite"
         >
             <ul class="art-category-popup__list">
-                <li>
-                    <button type="button" @click="editeCategory">Редактировать</button>
+                <li @click="editeCategory">
+                    <button type="button">Редактировать</button>
                 </li>
-                <li><button type="button">Удалить</button></li>
+                <li @click="removeCategory">
+                    <button type="button" >Удалить</button>
+                </li>
             </ul>
         </div>
 
@@ -31,6 +33,9 @@
                             parent-category-popup="Родительская категория 1"
                             @close_popup="closePopup"
         />
+        <popup-remove  :show-popup-remove-category="showPopupRemoveCategory"
+            @close-popup="closeRemovePopup"
+        />
     </section>
 </template>
 
@@ -38,15 +43,17 @@
     import card from '@/components/card.vue';
     import chevronUp from '@/assets/svg/chevron-up.svg';
     import menuCat from '@/assets/svg/menu.svg';
-    import ArtCreateCategory from '@/views/CreateCategory.vue'; 
-
+    import ArtCreateCategory from '@/views/CreateCategory.vue';
+    import popupRemove from '@/components/popup-remove.vue';
+    
     export default {
         name: 'ArtCategory',
         components: {
             card,
             chevronUp,
             menuCat,
-            ArtCreateCategory
+            ArtCreateCategory,
+            popupRemove
         },
         created() {
             document.addEventListener('click', e => {
@@ -65,7 +72,8 @@
         data() {
             return {
                 showModalMenuEdite: false,
-                showPopupEditeCategory: false
+                showPopupEditeCategory: false,
+                showPopupRemoveCategory: false
             }
         },
         methods: {
@@ -74,6 +82,12 @@
             },
             closePopup(val) {
                 this.showPopupEditeCategory = val;
+            },
+            closeRemovePopup(val) {
+                this.showPopupRemoveCategory = val;
+            },
+            removeCategory() {
+                this.showPopupRemoveCategory = true;
             }
         }
     }
