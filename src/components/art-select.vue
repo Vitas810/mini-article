@@ -1,12 +1,18 @@
 <template>
     <div ref="select" class="__select" data-state="">
-        <div class="__select__title" data-default="Option 0">{{ title }}</div>
-        <div class="__select__content"  >
-            <template v-for="(option, idx) in options">
+        <div class="__select__title" :class="{'open-dropdown': showFieldSearch}" data-default="Option 0">
+            <span ref="title">{{ title }}</span>
+            <input type="text"
+                class="__select__search"
+                v-model="search"
+                ref="search"
+                v-show="showFieldSearch">
+        </div>
+        <div class="__select__content"  ref="selectContent">
+            <template v-for="(option, idx) in searchOptions">
                 <input :id="`singleSelect_${idx}`"
                     class="__select__input"
                     type="radio"
-                    
                     name="singleSelect" />
                 <label :for="`singleSelect_${idx}`" class="__select__label">{{ option.name }}</label>
             </template>
@@ -28,7 +34,21 @@
             }
         },
         data() {
-            return {}
+            return {
+                search: null,
+                showFieldSearch: false,
+            }
+        },
+        computed: {
+            searchOptions() {
+                if (!this.search) {
+                    return this.options;
+                }
+
+                return this.options.filter((option) => {
+                    return option.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+                });
+            }
         },
         mounted() {
             this.init();
@@ -39,31 +59,56 @@
                 const selectSingle_title = selectSingle && selectSingle.querySelector('.__select__title');
                 const selectSingle_labels = selectSingle && selectSingle.querySelectorAll('.__select__label');
 
-                selectSingle_title && selectSingle_title.addEventListener('click', () => {
+                selectSingle_title && selectSingle_title.addEventListener('click', (event) => {
                     if ('active' === selectSingle.getAttribute('data-state')) {
                         selectSingle.setAttribute('data-state', '');
+                        this.showFieldSearch = false;
+                        this.search = null;
                     } else {
                         selectSingle.setAttribute('data-state', 'active');
+                        this.showFieldSearch = true;
+                    }
+
+                    if (event.target == this.$refs.search) {
+                        selectSingle.setAttribute('data-state', 'active');
+                        this.showFieldSearch = true;
                     }
                 });
 
                 for (let i = 0; i < selectSingle_labels.length; i++) {
                     selectSingle_labels[i] && selectSingle_labels[i].addEventListener('click', (evt) => {
-                        selectSingle_title.textContent = evt.target.textContent;
+                        this.$refs.title.innerText = evt.target.textContent;
                         selectSingle.setAttribute('data-state', '');
+                        this.showFieldSearch = false;
+                        // this.search = null;
                     });
                 }
 
-                const reset = document.querySelector('.reset');
-                reset && reset.addEventListener('click', () => {
-                    selectSingle_title.textContent = selectSingle_title.getAttribute('data-default');
-                });
-            }
+                // const reset = document.querySelector('.reset');
+                // reset && reset.addEventListener('click', () => {
+                //     selectSingle_title.textContent = selectSingle_title.getAttribute('data-default');
+                //     this.showFieldSearch = false;
+                // });
+            },
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    .open-dropdown {
+        font-size: 11px !important;
+        line-height: 13px !important;
+        flex-direction: column;
+        align-items: flex-start !important;
+        padding: 5px 7px 6px 12px !important;
+        & input {
+            border: none;
+            padding: 4px 0;
+            outline: transparent;
+            padding-right: 30px;
+            width: 90%;
+        }
+    }
     .__select {
         position: relative;
         width: 100%;
@@ -84,7 +129,7 @@
                 opacity: 1;
             }
             
-            .__select__label + .__select__input + .__select__label {
+            .__select__input + .__select__label {
                 max-height: 40px;
                 font-size: 14px;
                 line-height: 22px;
