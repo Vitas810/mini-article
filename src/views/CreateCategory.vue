@@ -6,21 +6,23 @@
             <form class="category-form">
                 <label>
                     <input name="nameCreateCategory"
-                            v-model="nameCategory"
+                            v-model="defaultCategory.name"
                             class="category__name"
                             type="text"
                             placeholder="Название" />
                 </label>
 
                 <art-select title="Родительская карточка (необязательно)"
-                    :options="parentCategories"
-                    v-model="parentCategory" />
+                    :options="categoryList"
+                    v-model="defaultCategory.parentCategory" />
                 <art-select title="Вложенные статьи"
                     :options="parentCategories"
-                    v-model="nestedCategory" />
+                    v-model="defaultCategory.nestedCategory" />
 
                 <div class="category-footer">
-                    <btn text="Сохранить" :showIcon="false" />
+                    <btn text="Сохранить" :showIcon="false"
+                        @click="createCategory"
+                    />
                     <btn-cancel @click="closePopup" />
                 </div>
             </form>
@@ -46,16 +48,24 @@
             },
             nameCategoryPopup: {
                 type: String,
-                require: false
+                require: false,
+                default: null
             },
             parentCategoryPopup: {
                 type: String,
-                require: false
+                require: false,
+                default: null
             },
             nestedCategoryPopup: {
                 type: String,
-                require: false
+                require: false,
+                default: null
             },
+            editCategory: {
+                type: Boolean,
+                require: false,
+                default: false
+            }
         },
         components: {
             btn,
@@ -77,18 +87,22 @@
             return {
                 showModal: this.showPopupCategory || false,
                 title: this.titlePopup || '',
-                nameCategory: this.nameCategoryPopup || '',
-                parentCategory: this.parentCategoryPopup || '',
-                nestedCategory: this.nestedCategoryPopup || '',
+                defaultCategory: {
+                    name: this.nameCategoryPopup || '',
+                    parentCategory: this.parentCategoryPopup || '',
+                    nestedCategory: '',
+                },
                 parentCategories: [
                     { id: 1, name: 'Родительская категория 1'},
                     { id: 2, name: 'Родительская категория 2'},
                     { id: 3, name: 'Родительская категория 3'},
                     { id: 4, name: 'Родительская категория 4'},
                     { id: 5, name: 'Родительская категория 5'},
-                ]
+                ],
+                categoryList:   new Map(),
             }
         },
+        computed: {},
         watch: {
             'showPopupCategory'(value) {
                 this.showModal = value;
@@ -98,6 +112,40 @@
             closePopup() {
                 this.showModal = false;
                 this.$emit('close_popup', this.showModal);
+            },
+            createCategory() {
+                if (this.editCategory) return;
+                
+                if(this.defaultCategory.name) {
+                    // const arr = new Map();
+                    let parent = false;
+                    let id = Date.now();
+                    let children = [];
+
+                    let newCategory = {
+                        id,
+                        name: this.defaultCategory.name,
+                        parent,
+                        ...this.defaultCategory,
+                        children
+                    }
+                    if (this.defaultCategory.parentCategory) {
+                        parent = true;
+                        console.log('1', this.categoryList);
+                        let currentCategory = this.categoryList[this.defaultCategory.parentCategory ];
+                        currentCategory.children.push(newCategory)
+                        localStorage.setItem('categoryList', JSON.stringify(this.categoryList));
+                        this.showModal = false;
+                        this.$emit('close_popup', this.showModal);
+                        return 
+                    }
+                    console.log('cr', this.categoryList);
+                    this.categoryList.set(id, newCategory)
+                    // this.categoryList && newCategory.name && this.categoryList.push(arr)
+                    this.categoryList && newCategory.name && localStorage.setItem('categoryList', JSON.stringify([...this.categoryList]));
+                    this.showModal = false;
+                    this.$emit('close_popup', this.showModal);
+                }
             }
         }
     };

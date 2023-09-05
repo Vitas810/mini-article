@@ -1,5 +1,5 @@
 <template>
-    <button @click="clickBtn">
+    <button @click="clickBtn" type="button">
         {{ text }}
         <plus v-if="showIcon" />
      </button>

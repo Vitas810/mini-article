@@ -10,11 +10,16 @@
         </div>
         <div class="__select__content"  ref="selectContent">
             <template v-for="(option, idx) in searchOptions">
-                <input :id="`singleSelect_${idx}`"
-                    class="__select__input"
-                    type="radio"
-                    name="singleSelect" />
-                <label :for="`singleSelect_${idx}`" class="__select__label">{{ option.name }}</label>
+                <template v-if="option.id">
+                    <input :id="`singleSelect_${idx}`"
+                        class="__select__input"
+                        type="radio"
+                        v-model="selected"
+                        :value="option.id"
+                        @input="$emit('input', $event.target.value)"
+                        name="singleSelect" />
+                    <label :for="`singleSelect_${idx}`" class="__select__label">{{ option.name }}</label>
+                </template>
             </template>
         </div>
     </div>
@@ -30,13 +35,14 @@
                 default: 'Название'
             },
             options: {
-                type: Array, Object
+                type: [Array, Object]
             }
         },
         data() {
             return {
                 search: null,
                 showFieldSearch: false,
+                selected: null
             }
         },
         computed: {
@@ -80,6 +86,7 @@
                         this.$refs.title.innerText = evt.target.textContent;
                         selectSingle.setAttribute('data-state', '');
                         this.showFieldSearch = false;
+                        console.log('e', evt.target);
                         // this.search = null;
                     });
                 }
